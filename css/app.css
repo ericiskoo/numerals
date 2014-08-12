@@ -1,0 +1,140 @@
+body {
+	font-family: 'Open Sans','Arial',sans-serif;
+	font-weight: 300;
+	text-align: center;
+	background-color: #faf8ef;
+}
+h1.start-title {
+	font-size: 76px;
+	margin-bottom: 0;
+	color: #444444;
+	font-weight: 400;
+}
+span.start-numeral {
+	font-size: 42px;
+	padding-left: .2em;
+	padding-right: .2em;
+}
+p.start-desc {
+	padding-top: 30px;
+	color: #776e65;
+	font-size: 18px;
+	width: 400px;
+	margin: auto;
+	text-align: left;
+}
+p.start-desc a {
+	color: #776e65;
+	font-weight: bold;
+}
+
+.game-container {
+	width: 400px;
+	margin: auto;
+	text-align: left;
+	font-size: 16px;
+	font-weight: 300;
+}
+.score-container {
+	color: #eee4da;
+	background-color: #bbada0;
+	padding: 5px 10px;
+	width: 265px;
+	display: inline-block;
+	border-radius: 5px;
+}
+.score-container span.score {
+	color: #ffffff;
+	margin-left: .25em;
+	font-size: 18px;
+	font-weight: 600;
+	height: 20px;
+}
+.score-container span.score-earned {
+	color: #edcf72;
+}
+.new-game {
+	background-color: #bbada0;
+	color: #ffffff;
+	text-align: center;
+	padding-top: 7px;
+	padding-bottom: 7px;
+	width: 110px;
+	float: right;
+	border-radius: 5px;
+	height: 20px;
+}
+.new-game:hover {
+	background-color: #a6978a;
+	cursor: pointer;
+	cursor: hand;
+}
+table {
+	margin: auto;
+	margin-top: 50px;
+	margin-bottom: 20px;
+	text-align: center;
+}
+td.lang {
+	color: #444444;
+	font-size: 18px;
+}
+td.operand {
+	padding-left: .2em;
+	padding-right: .2em;
+}
+td.var {
+	font-family: 'Arial', sans-serif;
+	font-size: 150px;
+}
+div[lang-progress] {
+	color: #8f7a66;
+}
+
+input {
+	border-radius: 5px;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+input[type=number] {
+	width: 400px;
+	font-family: 'Arial', sans-serif;
+	border: 1px solid #cccccc;
+	font-size: 120px;
+}
+input[type=number].correct {
+	color: #ffffff;
+	background-color: #5cb85c;
+	border-color: #4cae4c;
+}
+input[type=number].incorrect {
+	color: #ffffff;
+	background-color: #d9534f;
+	border-color: #d43f3a;
+}
+input[type=submit] {
+	width: 402px;
+	font-family: 'Open Sans','Arial',sans-serif;
+	font-weight: 300;
+	margin-top: 20px;
+	font-size: 24px;
+	padding-top: .7em;
+	padding-bottom: .7em;
+	color: #ffffff;
+	background-color: #8f7a66;
+	border: 1px solid #806D5B;
+}
+input[type=submit]:hover {
+	background-color: #806D5B;
+	cursor: pointer;
+	cursor: hand;
+}
+input[type=submit]:focus {
+	background-color: #806D5B;
+}
