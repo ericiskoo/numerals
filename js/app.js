@@ -1,4 +1,4 @@
-var numeralsApp = angular.module('numeralsApp', ['ui.router','ngAnimate']);
+var numeralsApp = angular.module('numeralsApp', ['ui.router']);
 
 numeralsApp.config(function($stateProvider, $urlRouterProvider) {    
   $urlRouterProvider.otherwise('/');
