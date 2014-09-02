@@ -1,4 +1,4 @@
-var numeralsApp = angular.module('numeralsApp', ['ui.router']);
+var numeralsApp = angular.module('numeralsApp', ['ui.router','ngAnimate','ngStorage']);
 
 numeralsApp.config(function($stateProvider, $urlRouterProvider) {    
   $urlRouterProvider.otherwise('/');
@@ -18,37 +18,73 @@ numeralsApp.config(function($stateProvider, $urlRouterProvider) {
     .state('game.answer', {
       templateUrl: 'partials/answer.html'
     })
+
+    .state('achievements', {
+      templateUrl: 'partials/achievements.html',
+      controller: 'AchievementsCtrl'
+    })
 });
 
-numeralsApp.factory('dataFactory', function() {
+numeralsApp.factory('numeralService', function() {
   return {
-    'Western Arabic' : {'total':1, 'numerals':['0','1','2','3','4','5','6','7','8','9'], 'counts':[1,1,1,1,1,1,1,1,1,1]},
-    'Eastern Arabic' : {'total':1, 'numerals':['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'], 'counts':[1,1,1,1,1,1,1,1,1,1]},
-
-    'Devanagari'     : {'total':1, 'numerals':['०','१','२','३','४','५','६','७','८','९'], 'counts':[1,1,1,1,1,1,1,1,1,1]},
-    'Gujarati'       : {'total':1, 'numerals':['૦','૧','૨','૩','૪','૫','૬','૭','૮','૯'], 'counts':[1,1,1,1,1,1,1,1,1,1]},
-    'Gurmukhi'       : {'total':1, 'numerals':['੦','੧','੨','੩','੪','੫','੬','੭','੮','੯'], 'counts':[1,1,1,1,1,1,1,1,1,1]},
-    'Oriya'          : {'total':1, 'numerals':['୦','୧','୨','୩','୪','୫','୬','୭','୮','୯'], 'counts':[1,1,1,1,1,1,1,1,1,1]},
-    'Bengali'        : {'total':1, 'numerals':['০','১','২','৩','৪','৫','৬','৭','৮','৯'], 'counts':[1,1,1,1,1,1,1,1,1,1]},
-    'Tamil'          : {'total':1, 'numerals':['௦','௧','௨','௩','௪','௫','௬','௭','௮','௯'], 'counts':[1,1,1,1,1,1,1,1,1,1]},
-
-    'Burmese'        : {'total':1, 'numerals':['๐','၁','၂','၃','၄','၅','၆','၇','၈','၉'], 'counts':[1,1,1,1,1,1,1,1,1,1]},
-    'Khmer'          : {'total':1, 'numerals':['០','១','២','៣','៤','៥','៦','៧','៨','៩'], 'counts':[1,1,1,1,1,1,1,1,1,1]},
-    'Lao'            : {'total':1, 'numerals':['໐','໑','໒','໓','໔','໕','໖','໗','໘','໙'], 'counts':[1,1,1,1,1,1,1,1,1,1]},
-    'Mongolian'      : {'total':1, 'numerals':['᠐','᠑','᠒','᠓','᠔','᠕','᠖','᠗','᠘','᠙'], 'counts':[1,1,1,1,1,1,1,1,1,1]},
-    'Tibetan'        : {'total':1, 'numerals':['༠','༡','༢','༣','༤','༥','༦','༧','༨','༩'], 'counts':[1,1,1,1,1,1,1,1,1,1]},
-    'Thai'           : {'total':1, 'numerals':['๐','๑','๒','๓','๔','๕','๖','๗','๘','๙'], 'counts':[1,1,1,1,1,1,1,1,1,1]},
-
-    'Chinese'        : {'total':1, 'numerals':['零','一','二','三','四','五','六','七','八','九'], 'counts':[1,1,1,1,1,1,1,1,1,1]}
+    'Western Arabic' : ['0','1','2','3','4','5','6','7','8','9'],
+    'Eastern Arabic' : ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'],
+    'Devanagari'     : ['०','१','२','३','४','५','६','७','८','९'],
+    'Gujarati'       : ['૦','૧','૨','૩','૪','૫','૬','૭','૮','૯'],
+    'Gurmukhi'       : ['੦','੧','੨','੩','੪','੫','੬','੭','੮','੯'],
+    'Oriya'          : ['୦','୧','୨','୩','୪','୫','୬','୭','୮','୯'],
+    'Bengali'        : ['০','১','২','৩','৪','৫','৬','৭','৮','৯'],
+    'Tamil'          : ['௦','௧','௨','௩','௪','௫','௬','௭','௮','௯'],
+    'Burmese'        : ['๐','၁','၂','၃','၄','၅','၆','၇','၈','၉'],
+    'Khmer'          : ['០','១','២','៣','៤','៥','៦','៧','៨','៩'],
+    'Lao'            : ['໐','໑','໒','໓','໔','໕','໖','໗','໘','໙'],
+    'Mongolian'      : ['᠐','᠑','᠒','᠓','᠔','᠕','᠖','᠗','᠘','᠙'],
+    'Tibetan'        : ['༠','༡','༢','༣','༤','༥','༦','༧','༨','༩'],
+    'Thai'           : ['๐','๑','๒','๓','๔','๕','๖','๗','๘','๙'],
+    'Chinese'        : ['零','一','二','三','四','五','六','七','八','九']
   }
 });
 
-numeralsApp.controller('StartCtrl', function($scope, $state, dataFactory) {
+numeralsApp.factory('achievementService', function() {
+  return [
+    {'title':'You Got One', 'desc':'You actually got one right!'},
+    {'title':'100 Points', 'desc':'Yay!'},
+    {'title':'250 Points', 'desc':'Woohoo!!'},
+    {'title':'500 Points', 'desc':'Points!!!'},
+    {'title':'1000 Points', 'desc':'More points!!!!'},
+    {'title':'2500 Points', 'desc':'EVEN MORE POINTS!!!!!'},
+    {'title':'5000 Points', 'desc':'HALFWAY TO 10000!!!!!!'},
+    {'title':'10000 Points', 'desc':"IT'S OVER 9000!!!!!!!"},
+    {'title':'3 in a Row', 'desc':'Luck.'},
+    {'title':'5 in a Row', 'desc':'Miracles can happen.'},
+    {'title':'10 in a Row', 'desc':"Maybe you're actually getting better."},
+    {'title':'25 in a Row', 'desc':'Are you cheating?'},
+    {'title':'50 in a Row', 'desc':'You must be cheating.'},
+    {'title':'100 in a Row', 'desc':'Fine. You win.'},
+    {'title':'Western Arabic', 'desc':'0 1 2 3 4 5 6 7 8 9'},
+    {'title':'Eastern Arabic', 'desc':'٩ ٨ ٧ ٦ ٥ ٤ ٣ ٢ ١ ٠'},
+    {'title':'Devanagari', 'desc':'० १ २ ३ ४ ५ ६ ७ ८ ९'},
+    {'title':'Gujarati', 'desc':'૦ ૧ ૨ ૩ ૪ ૫ ૬ ૭ ૮ ૯'},
+    {'title':'Gurmukhi', 'desc':'੦ ੧ ੨ ੩ ੪ ੫ ੬ ੭ ੮ ੯'},
+    {'title':'Oriya', 'desc':'୦ ୧ ୨ ୩ ୪ ୫ ୬ ୭ ୮ ୯'},
+    {'title':'Bengali', 'desc':'০ ১ ২ ৩ ৪ ৫ ৬ ৭ ৮ ৯'},
+    {'title':'Tamil', 'desc':'௦ ௧ ௨ ௩ ௪ ௫ ௬ ௭ ௮ ௯'},
+    {'title':'Burmese', 'desc':'๐ ၁ ၂ ၃ ၄ ၅ ၆ ၇ ၈ ၉'},
+    {'title':'Khmer', 'desc':'០ ១ ២ ៣ ៤ ៥ ៦ ៧ ៨ ៩'},
+    {'title':'Lao', 'desc':'໐ ໑ ໒ ໓ ໔ ໕ ໖ ໗ ໘ ໙'},
+    {'title':'Mongolian', 'desc':'᠐ ᠑ ᠒ ᠓ ᠔ ᠕ ᠖ ᠗ ᠘ ᠙'},
+    {'title':'Tibetan', 'desc':'༠ ༡ ༢ ༣ ༤ ༥ ༦ ༧ ༨ ༩'},
+    {'title':'Thai', 'desc':'๐ ๑ ๒ ๓ ๔ ๕ ๖ ๗ ๘ ๙'},
+    {'title':'Chinese', 'desc':'零 一 二 三 四 五 六 七 八 九'}
+  ]
+});
+
+numeralsApp.controller('StartCtrl', function($scope, $state, numeralService) {
   var shuffle = function(o) {
     for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
     return o;
   };
-  $scope.langs = dataFactory;
+  $scope.langs = numeralService;
   $scope.startNumerals = [];
   for (lang in $scope.langs) {
     $scope.startNumerals.push(lang);
@@ -56,23 +92,29 @@ numeralsApp.controller('StartCtrl', function($scope, $state, dataFactory) {
   $scope.startNumerals = shuffle($scope.startNumerals);
   $scope.startNumerals = $scope.startNumerals.slice(0,10);
   for (var i=0; i<$scope.startNumerals.length; i++) {
-    $scope.startNumerals[i] = $scope.langs[$scope.startNumerals[i]]['numerals'][i];
+    $scope.startNumerals[i] = $scope.langs[$scope.startNumerals[i]][i];
   }
 
   $scope.startGame = function() {
     $scope.nextQuestion();
     $state.go('game.question');
   }
-}); 
+  $scope.viewAchievements = function() {
+    $state.go('achievements');
+  }
+});
 
-numeralsApp.controller('GameCtrl', function($scope, $state, $log, dataFactory) {
-  $scope.langs = angular.copy(dataFactory);
+numeralsApp.controller('GameCtrl', function($scope, $state, $localStorage, $log, numeralService) {
+  $scope.langs = {};
+  for (lang in numeralService) {
+    $scope.langs[lang] = {'numerals':angular.copy(numeralService[lang]), 'total':1, 'counts':[1,1,1,1,1,1,1,1,1,1]};
+  }
+  $scope.$storage = $localStorage.$default({'earnedAchievements':[], 'bestScore':0});
+  console.log($scope.$storage.earnedAchievements);
 
   $scope.validLangs = ['Western Arabic','Eastern Arabic'];
   $scope.currentStreak = 0;
-  $scope.bestStreak = 0;
   $scope.currentScore = 0;
-  $scope.bestScore = 0;
   $scope.earnedPoints;
   $scope.trials = 0.0;
   $scope.correct = 0.0;
@@ -101,6 +143,8 @@ numeralsApp.controller('GameCtrl', function($scope, $state, $log, dataFactory) {
   }
 
   var generateQuestion = function() {
+    $scope.newAchievements = [];
+
     // Update validLangs
     var langCounts = [];
     var addNewLang = true;
@@ -137,28 +181,27 @@ numeralsApp.controller('GameCtrl', function($scope, $state, $log, dataFactory) {
   }
   
   $scope.submitResponse = function(response) {
+    $scope.newAchievements = [];
+
     $scope.answer = $scope.index1 + $scope.index2;
     if (response == $scope.answer) {
       $scope.status = 'correct';
       $scope.correct += 1;
+      $scope.currentStreak += 1;
+      // Update score
+      $scope.currentScore += 10*$scope.currentStreak;
+      $scope.earnedPoints = '+'+(10*$scope.currentStreak);
+      if ($scope.currentScore > $scope.$storage.bestScore) {
+        $scope.$storage.bestScore = $scope.currentScore;
+      }
       // Update counts
       $scope.langs[$scope.lang1]['total'] += 1;
       $scope.langs[$scope.lang2]['total'] += 1;
       $scope.langs[$scope.lang1]['counts'][$scope.index1] += 1;
       $scope.langs[$scope.lang2]['counts'][$scope.index2] += 1;
-      // Update streak
-      $scope.currentStreak += 1;
-      if ($scope.currentStreak > $scope.bestStreak) {
-        $scope.bestStreak = $scope.currentStreak;
-      }
-      // Update score
-      $scope.currentScore += 10*$scope.currentStreak;
-      $scope.earnedPoints = '+'+(10*$scope.currentStreak);
-      if ($scope.currentScore > $scope.bestScore) {
-        $scope.bestScore = $scope.currentScore;
-      }
     } else {
       $scope.status = 'incorrect';
+      $scope.currentStreak = 0;
       // Update counts
       if ($scope.langs[$scope.lang1]['total'] > 1) {
         $scope.langs[$scope.lang1]['total'] = $scope.langs[$scope.lang1]['total'] - 1;
@@ -172,10 +215,40 @@ numeralsApp.controller('GameCtrl', function($scope, $state, $log, dataFactory) {
       if ($scope.langs[$scope.lang2]['counts'][$scope.index2] > 1) {
         $scope.langs[$scope.lang2]['counts'][$scope.index2] = $scope.langs[$scope.lang2]['counts'][$scope.index2] - 1;
       }
-      // Update streak
-      $scope.currentStreak = 0;
     }
     $scope.accuracy = $scope.correct/$scope.trials;
+
+    // Score achievements
+    var breakPoints = [100,250,500,1000,2500,5000,10000];
+    for (var i=0; i<breakPoints.length; i++) {
+      var title = breakPoints[i]+' Points';
+      if ($scope.currentScore>=breakPoints[i] && $scope.$storage.earnedAchievements.indexOf(title)==-1) {
+        $scope.$storage.earnedAchievements.push(title);
+        $scope.newAchievements.push(title);
+        break;
+      }
+    }
+    // Streak achievements
+    var breakPoints = [1,3,5,10,25,50,100];
+    for (var i=0; i<breakPoints.length; i++) {
+      var title = breakPoints[i]+' in a Row';
+      if (breakPoints[i]==1) {
+        title = 'You Got One';
+      }
+      if ($scope.currentStreak==breakPoints[i] && $scope.$storage.earnedAchievements.indexOf(title)==-1) {
+        $scope.$storage.earnedAchievements.push(title);
+        $scope.newAchievements.push(title);
+        break;
+      }
+    }
+    // Language achievements
+    for (var i=0; i<$scope.validLangs.length; i++) {
+      if ($scope.langs[$scope.validLangs[i]].total>10 && $scope.$storage.earnedAchievements.indexOf($scope.validLangs[i])==-1) {
+        $scope.$storage.earnedAchievements.push($scope.validLangs[i]);
+        $scope.newAchievements.push($scope.validLangs[i]);
+      }
+    }
+
     $state.go('game.answer');
   }
 
@@ -188,7 +261,10 @@ numeralsApp.controller('GameCtrl', function($scope, $state, $log, dataFactory) {
   }
 
   $scope.newGame = function() {
-    $scope.langs = angular.copy(dataFactory);
+    $scope.langs = {};
+    for (lang in numeralService) {
+      $scope.langs[lang] = {'numerals':angular.copy(numeralService[lang]), 'total':1, 'counts':[1,1,1,1,1,1,1,1,1,1]};
+    }
     $scope.answer = null;
     $scope.validLangs = ['Western Arabic','Eastern Arabic'];
     $scope.currentStreak = 0;
@@ -243,4 +319,16 @@ numeralsApp.directive('langProgress', function() {
       }, true);
     }
   };
+});
+
+numeralsApp.controller('AchievementsCtrl', function($scope, $state, $localStorage, achievementService) {
+  $scope.$storage = $localStorage.$default({'earnedAchievements':[], 'bestScore':0});
+  $scope.achievements = achievementService;
+
+  $scope.inArray = function(str) {
+    return ($scope.$storage.earnedAchievements.indexOf(str) > -1) ? true : false;
+  }
+  $scope.startMenu = function() {
+    $state.go('start');
+  }
 });

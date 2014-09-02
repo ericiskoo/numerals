@@ -1,0 +1,9 @@
+<form ng-submit="startMenu()">
+	<input type="submit" value="MAIN MENU">
+</form>
+<div class="achievement-container">
+	<div class="achievement-tile" ng-class="{earned: inArray(achievement.title)}" ng-repeat="achievement in achievements">
+		<span class="achievement-title">{{achievement.title | uppercase}}</span>
+		<span class="achievement-desc" ng-show="inArray(achievement.title)"><br>{{achievement.desc}}</span>
+	</div>
+</div>

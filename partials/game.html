@@ -4,6 +4,12 @@
   <div ng-click="newGame()" class="new-game">NEW GAME</div>
   <!--<div>{{trials}} ({{accuracy | percentage:2}}), Current Streak: {{currentStreak}}, Longest Streak: {{bestStreak}}</div>-->
 </div>
+<div class="achievement-container">
+  <div class="achievement-tile earned new" ng-repeat="title in newAchievements">
+    <span class="achievement-awarded">ACHIEVEMENT AWARDED!</span><br>
+    <span class="achievement-title">{{title | uppercase}}</span>
+  </div>
+</div>
 <table>
   <tr>
     <td class="lang">
