@@ -10,22 +10,26 @@
     <span class="achievement-title">{{title | uppercase}}</span>
   </div>
 </div>
-<table>
-  <tr>
-    <td class="lang">
-      {{lang1.toUpperCase()}}
-      <div class="lang-progress" lang-progress="langs[lang1].total"></div>
-    </td>
-    <td class="lang"></td>
-    <td class="lang">
-      {{lang2.toUpperCase()}}
-      <div class="lang-progress" lang-progress="langs[lang2].total"></div>
-    </td>
-  </tr>
-  <tr>
-    <td class="var">{{var1}}</td>
-    <td class="var operand">+</td>
-    <td class="var">{{var2}}</td>
-  </tr>
-</table>
-<div ui-view></div>
+<div class="question-container">
+  <table>
+    <tr>
+      <td class="lang">
+        {{lang1.toUpperCase()}}
+        <div class="lang-progress" lang-progress="langs[lang1].total"></div>
+      </td>
+      <td class="lang"></td>
+      <td class="lang">
+        {{lang2.toUpperCase()}}
+        <div class="lang-progress" lang-progress="langs[lang2].total"></div>
+      </td>
+    </tr>
+    <tr>
+      <td class="var">{{var1}}</td>
+      <td class="var operand">+</td>
+      <td class="var">{{var2}}</td>
+    </tr>
+  </table>
+</div>
+<div class="response-container">
+  <div class="animate-fade" ui-view></div>
+</div>

@@ -1,8 +1,13 @@
 body {
 	font-family: 'Open Sans','Arial',sans-serif;
 	font-weight: 300;
-	text-align: center;
 	background-color: #faf8ef;
+}
+.wrapper {
+	width: 400px;
+	position: relative;
+	margin: auto;
+	text-align: center;
 }
 h1.start-title {
 	font-size: 76px;
@@ -29,8 +34,6 @@ p.start-desc a {
 }
 
 .game-container {
-	width: 400px;
-	margin: auto;
 	text-align: left;
 	font-size: 16px;
 	font-weight: 300;
@@ -67,6 +70,10 @@ p.start-desc a {
 	cursor: pointer;
 	cursor: hand;
 }
+
+.question-container {
+	position: relative;
+}
 table {
 	margin: auto;
 	margin-top: 10px;
@@ -96,6 +103,9 @@ div[lang-progress] {
 	color: #8f7a66;
 }
 
+.response-container {
+	position: relative;
+}
 input {
 	border-radius: 5px;
 	text-align: center;
@@ -181,15 +191,44 @@ input[type=submit]:focus {
 }
 
 /* animations */
+.animate-fade {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.animate-fade.ng-enter, .animate-fade.ng-leave {
+	-webkit-transition: .2s linear all;
+	transition: .2s linear all;
+}
+.animate-fade.ng-enter {
+ 	opacity: 0;
+}
+.animate-fade.ng-enter.ng-enter-active {
+	opacity: 1;
+}
+.animate-fade.ng-leave {
+	opacity: 1;
+}
+.animate-fade.ng-leave.ng-leave-active {
+	opacity: 0;
+}
+
+.score, .score-earned {
+	-webkit-transition: .5s linear all;
+	transition: .5s linear all;
+}
+
+.achievement-tile.ng-enter, .achievement-tile.ng-leave {
+	-webkit-transition: .2s linear all;
+	transition: .2s linear all;
+}
 .achievement-tile.ng-enter {
-	transition: 0.25s;
 	opacity: 0;
 }
 .achievement-tile.ng-enter.ng-enter-active{
 	opacity: 1;
 }
 .achievement-tile.ng-leave {
-    transition: 0.25s;
 	opacity: 1;
 }
 .achievement-tile.ng-leave.ng-leave-active{
